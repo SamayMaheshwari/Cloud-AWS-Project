@@ -16,6 +16,10 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
     setLoading(true);
     try {
       const res = await apiService.loginUser({ email, password });
@@ -23,8 +27,8 @@ const Login = () => {
         toast.success("Login successful!");
         navigate("/dashboard");
       }
-    } catch (error) {
-      toast.error("Invalid credentials. Please try again.");
+    } catch (error: any) {
+      toast.error(error?.message || "Invalid credentials. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -43,29 +47,29 @@ const Login = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input 
+            <Input
               id="email"
-              type="email" 
-              placeholder="you@example.com" 
+              type="email"
+              placeholder="you@example.com"
               required
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <Link to="/forgot-password" opacity-50 className="text-xs text-primary hover:underline pointer-events-none">
+              <Link to="/forgot-password" className="text-xs text-primary hover:underline opacity-80">
                 Forgot password?
               </Link>
             </div>
-            <Input 
+            <Input
               id="password"
-              type="password" 
-              placeholder="••••••••" 
+              type="password"
+              placeholder="••••••••"
               required
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <Button type="submit" className="w-full gap-2 py-6" disabled={loading}>

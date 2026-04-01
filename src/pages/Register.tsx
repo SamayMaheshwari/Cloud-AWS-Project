@@ -21,13 +21,17 @@ const Register = () => {
     }
     setLoading(true);
     try {
-      const res = await apiService.registerUser(form);
+      const res = await apiService.registerUser({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
       if (res.success) {
-        toast.success("Account created successfully!");
-        navigate("/dashboard");
+        toast.success("Account created successfully! Please login.");
+        navigate("/login");
       }
-    } catch (error) {
-      toast.error("Failed to create account. Please try again.");
+    } catch (error: any) {
+      toast.error(error?.message || "Failed to create account. Please try again.");
     } finally {
       setLoading(false);
     }
